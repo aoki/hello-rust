@@ -37,7 +37,7 @@ mod tests {
     }
 
     #[test]
-    fn sort_u32_decending() {
+    fn sort_u32_descending() {
         let mut x = vec![10, 30, 11, 20, 4, 330, 21, 110];
         sort(&mut x, false);
         assert_eq!(x, vec![330, 110, 30, 21, 20, 11, 10, 4]);
