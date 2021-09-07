@@ -7,7 +7,26 @@ fn main() {
     // println!("Capacity: {}", v.capacity());
     v.push(10);
     let e = v.get(0);
-    println!("e = {}, v's length = {}", e.unwrap(), v.len());
+    println!(
+        "e = {}, v's length = {}, cap = {}",
+        e.unwrap(),
+        v.len(),
+        v.capacity()
+    );
     let e = v.pop();
-    println!("e = {}, v's length = {}", e.unwrap(), v.len());
+    println!(
+        "e = {}, v's length = {}, cap = {}",
+        e.unwrap(),
+        v.len(),
+        v.capacity()
+    );
+    for i in 0..6 {
+        v.push(i)
+    }
+    println!(
+        "e = {}, v's length = {}, cap = {}",
+        e.unwrap(),
+        v.len(),
+        v.capacity()
+    );
 }

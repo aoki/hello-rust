@@ -48,7 +48,18 @@ impl<T: Default> ToyVec<T> {
         self.len += 1;
     }
 
-    fn glow(&mut self) {}
+    fn glow(&mut self) {
+        if self.capacity() == 0 {
+            self.elements = Self::allocate_in_heap(1);
+        } else {
+            let new_elements = Self::allocate_in_heap(self.capacity() * 2);
+            let old_elements = std::mem::replace(&mut self.elements, new_elements);
+            // https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.enumerate
+            for (i, elem) in old_elements.into_vec().into_iter().enumerate() {
+                self.elements[i] = elem;
+            }
+        }
+    }
 
     // `&self` を引数に取るので、構造体の内容は変更されない
     // `Option<&T>` を返すため、`self` が所有する値の不変の参照を返す
@@ -83,6 +94,7 @@ impl<T: Default> ToyVec<T> {
         } else {
             self.len -= 1;
             // let elem = self.elements[self.len];
+            // 上記だと借用しているため所有権が奪えないた、対象の要素だけDefaultと置き換える
             let elem = std::mem::replace(&mut self.elements[self.len], Default::default());
             Some(elem)
         }
