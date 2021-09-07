@@ -7,5 +7,7 @@ fn main() {
     // println!("Capacity: {}", v.capacity());
     v.push(10);
     let e = v.get(0);
-    print!("{}", e.unwrap);
+    println!("e = {}, v's length = {}", e.unwrap(), v.len());
+    let e = v.pop();
+    println!("e = {}, v's length = {}", e.unwrap(), v.len());
 }
