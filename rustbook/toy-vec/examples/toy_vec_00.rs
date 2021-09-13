@@ -29,4 +29,18 @@ fn main() {
         v.len(),
         v.capacity()
     );
+    let mut c1 = Child(5);
+    let p1 = Parent { ref_child: &c1 };
+    println!("{:?}", p1);
+    c1 = Child(10);
+    println!("{:?}", c1);
+    // println!("{:?}", p1);
 }
+
+#[derive(Debug)]
+struct Parent<'a> {
+    ref_child: &'a Child,
+}
+
+#[derive(Debug)]
+struct Child(usize);

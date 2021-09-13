@@ -99,4 +99,48 @@ impl<T: Default> ToyVec<T> {
             Some(elem)
         }
     }
+
+    // &self と Iter<T> のライフタイムを同一にしているので、ライフタイムパラメーターを省略できる
+    pub fn iter(&self) -> Iter<T> {
+        Iter {
+            elements: &self.elements,
+            len: self.len,
+            pos: 0,
+        }
+    }
+}
+
+// 以下のような実装があった場合、コンパイラは elements のライフタイムが推論できないので、指定してあげる必要がある
+// pub struct Iter<T> {
+//     elements: &Box<T>,
+//     len: usize,
+//     pos: usize,
+// }
+pub struct Iter<'a, T> {
+    elements: &'a Box<[T]>,
+    len: usize,
+    pos: usize,
+}
+
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.pos >= self.len {
+            None
+        } else {
+            let res = Some(&self.elements[self.pos]);
+            self.pos += 1;
+            res
+        }
+    }
+}
+
+impl<'a, T: Default> IntoIterator for &'a ToyVec<T> {
+    type Item = &'a T;
+    type IntoIter = Iter<'a, T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
 }
